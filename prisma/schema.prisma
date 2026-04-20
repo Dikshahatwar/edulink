@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String       @id @default(uuid())
+  email       String       @unique
+  password    String
+  name        String
+  role        String       // "STUDENT" or "FACULTY"
+  createdAt   DateTime     @default(now())
+
+  // Relations
+  assignments CreatedAssignment[]
+  submissions Submission[]
+}
+
+model CreatedAssignment {
+  id            String       @id @default(uuid())
+  title         String
+  description   String
+
+  assignedDate  DateTime     // ✅ NEW
+  dueDate       DateTime     // submission date
+
+  createdAt     DateTime     @default(now())
+  filePath      String?
+
+  facultyId     String
+  faculty       User         @relation(fields: [facultyId], references: [id])
+
+  submissions   Submission[]
+}
+
+model Submission {
+  id              String            @id @default(uuid())
+  filePath        String
+  content         String            // Extracted text for plagiarism check
+  submittedAt     DateTime          @default(now())
+  plagiarismScore Float?            // Percentage score
+
+  studentId       String
+  student         User              @relation(fields: [studentId], references: [id])
+
+  assignmentId    String
+  assignment      CreatedAssignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+}
