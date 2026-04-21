@@ -152,7 +152,7 @@ export default function StudentAssignmentSubmit({
             <form onSubmit={handleUpload} className="space-y-6">
 
               {/* 🔥 SUBMIT BUTTON AT TOP (ALWAYS VISIBLE) */}
-              <button
+              {/* <button
                 type="submit"
                 style={{
                   width: "100%",
@@ -166,7 +166,7 @@ export default function StudentAssignmentSubmit({
                 }}
               >
                 {loading ? "Uploading..." : "Submit Assignment"}
-              </button>
+              </button> */}
 
               {/* 📤 DROP ZONE */}
               <div
